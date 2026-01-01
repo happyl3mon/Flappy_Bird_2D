@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class obstacleSpawn : MonoBehaviour
@@ -6,7 +7,9 @@ public class obstacleSpawn : MonoBehaviour
     [SerializeField] private float maxTime = 5f;
     [SerializeField] GameObject pipe;
     [SerializeField] GameObject player;
+    public static bool resetGameCall = false;
     private float timer;
+    private bool resetTimer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,16 +22,35 @@ public class obstacleSpawn : MonoBehaviour
     void Update()
     {
         if (controller.runGame == true)
-        {
+        { 
+            Time.timeScale = 1; 
+            resetGameCall = false;
+
+            if (resetTimer == true)
+            {
+                SpawnPipe();
+                resetTimer = false;
+            }
+
             if (timer > maxTime)
             {
                 SpawnPipe();
                 timer = 0;
             }
             timer += Time.deltaTime;
-        } else
+        } else if (controller.runGame == false)
         {
-            DestroyPipe();
+            Time.timeScale = 0;
+            
+            if (resetGameCall == true)
+            {
+                Debug.Log("resetGameCall TRUE");
+                ResetGame();
+                Time.timeScale = 1;
+                resetTimer = true;
+                timer = 0f;
+                controller.runGame = true;
+            }
         }
     }
 
@@ -37,10 +59,18 @@ public class obstacleSpawn : MonoBehaviour
         Vector2 spawnPosition = new Vector2(2f, Random.Range(-heightRange, heightRange));
         GameObject pipeInstance = Instantiate(pipe, spawnPosition, Quaternion.identity); 
         Destroy(pipeInstance, 3f);
+        
     }
      
-    void DestroyPipe()
+    void ResetGame()
     {
-       // Destroy(pipeInstance, 0f);
+        Debug.Log("ResetGame Function");
+        GameObject[] allPipes = GameObject.FindGameObjectsWithTag("pipe_tag");
+        foreach(GameObject gameObject in allPipes)
+        {
+            Destroy(gameObject);
+        }
+
+        resetGameCall = false;
     }
 }

@@ -7,7 +7,8 @@ public class controller : MonoBehaviour
     [SerializeField] private Rigidbody2D rigidbody2D;
     [SerializeField] private KeyCode keySelect;
     [SerializeField] private float linearVelocityMultiplier;
-    [SerializeField] private KeyCode restartGame;
+    [SerializeField] private GameObject obstacle;
+    public static KeyCode restartGameInput = KeyCode.Backspace;
     public static bool runGame;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -15,6 +16,7 @@ public class controller : MonoBehaviour
     {
         rigidbody2D.GetComponent<Rigidbody2D>();
         runGame = true;
+        obstacle.GetComponent<obstacleSpawn>();
     }
 
     // Update is called once per frame
@@ -23,7 +25,6 @@ public class controller : MonoBehaviour
         if(runGame == true)
         {
             //rigidbody2D.gravityScale = 4.5f;
-            Time.timeScale = 1;
             if (Input.GetKeyDown(keySelect))
             {
                 rigidbody2D.linearVelocityY += linearVelocityMultiplier;
@@ -32,10 +33,14 @@ public class controller : MonoBehaviour
         } else if (runGame == false)
         {
             //rigidbody2D.gravityScale = 0f;
-            Time.timeScale = 0;
-            if (Input.GetKeyDown(restartGame))
+            if (Input.GetKeyDown(restartGameInput))
             {
-                RestartGame();
+                obstacleSpawn.resetGameCall = true;
+                ResetPlayer();
+              //  Debug.Log(obstacleSpawn.resetGameCall);
+
+               // Debug.Log(obstacleSpawn.resetGameCall);
+                
             }
         }        
     }
@@ -43,14 +48,13 @@ public class controller : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         runGame = false;
-        Debug.Log("runGame set to false");
-        Debug.Log("The Player has Collided with an Obstacle");
+        //Debug.Log("runGame set to false");
+        //Debug.Log("The Player has Collided with an Obstacle");
     }
 
-    void RestartGame()
+    void ResetPlayer()
     {
-        runGame = true;
         transform.position = new Vector3(0f, 0f);
-        Debug.Log("restartGame activated");
+        //Debug.Log("restartGame activated");
     }
 }
