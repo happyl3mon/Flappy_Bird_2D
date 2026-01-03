@@ -1,7 +1,5 @@
-using System.Runtime.CompilerServices;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class obstaclescroll : MonoBehaviour
 {

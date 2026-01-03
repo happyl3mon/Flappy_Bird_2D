@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class controller : MonoBehaviour
@@ -8,6 +7,7 @@ public class controller : MonoBehaviour
     [SerializeField] private KeyCode keySelect;
     [SerializeField] private float linearVelocityMultiplier;
     [SerializeField] private GameObject obstacle;
+    public static bool hasCollided;
     public static KeyCode restartGameInput = KeyCode.Backspace;
     public static bool runGame;
 
@@ -16,6 +16,7 @@ public class controller : MonoBehaviour
     {
         rigidbody2D.GetComponent<Rigidbody2D>();
         runGame = true;
+        hasCollided = false;
         obstacle.GetComponent<obstacleSpawn>();
     }
 
@@ -24,6 +25,7 @@ public class controller : MonoBehaviour
     {
         if(runGame == true)
         {
+            //hasCollided = false;
             //rigidbody2D.gravityScale = 4.5f;
             if (Input.GetKeyDown(keySelect))
             {
@@ -32,6 +34,7 @@ public class controller : MonoBehaviour
 
         } else if (runGame == false)
         {
+            //hasCollided = true;
             //rigidbody2D.gravityScale = 0f;
             if (Input.GetKeyDown(restartGameInput))
             {
@@ -48,6 +51,7 @@ public class controller : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         runGame = false;
+        hasCollided = true;
         //Debug.Log("runGame set to false");
         //Debug.Log("The Player has Collided with an Obstacle");
     }
