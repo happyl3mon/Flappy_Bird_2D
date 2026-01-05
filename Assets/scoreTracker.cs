@@ -21,15 +21,13 @@ public class scoreTracker : MonoBehaviour
     void Update()
     {
         //Debug.Log(controller.hasCollided);
- 
-        Debug.Log(scoreCount + " is current score");
 
-
-        if (controller.hasCollided == true)
+        if (controller.runGame == true)
         {
-            //Debug.Log(lastRunScore + " is the previous score");
-            Debug.Log(highScore + " is new high score");
-        }        
+           Debug.Log(scoreCount + " is current score");
+        }
+
+      
 
         if (Input.GetKeyDown(controller.restartGameInput))
         {
@@ -39,7 +37,6 @@ public class scoreTracker : MonoBehaviour
         if (controller.runGame == true)
         {
             scoreCount += Time.deltaTime;  
-
         }
 
         if (controller.runGame == false)
@@ -47,9 +44,7 @@ public class scoreTracker : MonoBehaviour
             //lastRunScore = scoreCount;
 
             if (isFirstRun == true || highScore < scoreCount)
-            {
-                Debug.Log("FIRST RUN? " + isFirstRun);
-                
+            {                
                 highScore = scoreCount;
             }
 
@@ -57,6 +52,15 @@ public class scoreTracker : MonoBehaviour
             {
                 scoreCount = 0f;
             }
+
+            if (controller.hasCollided == true)
+            {
+                //Debug.Log(lastRunScore + " is the previous score");
+                
+                Debug.Log(highScore + " is new high score");
+
+                controller.hasCollided = false;
+            }  
         }
     }
 }
